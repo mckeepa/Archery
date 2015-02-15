@@ -12,6 +12,12 @@
 
 	<script>
 		var shots = [];
+		var target = {
+			  x: 200,
+			  y: 200,
+			  r: 200 / 2,
+			}
+
 
 		document.getElementsByTagName("BODY")[0].onresize = function(){
 			console.log("OuterWidth: " + window.outerWidth);
@@ -39,11 +45,11 @@
 
 			var Radius = 300;
 
-			var target = {
+			target = {
 			  x: w / 2,
 			  y: h / 2,
 			  r: w / 2,
-			}
+			};
 
 		
 			var scores =  [
@@ -91,7 +97,8 @@
 				    y : y1-window.scrollY,
 				    score : 0,
 				};
-
+				shot.TargetCenterX = target.x;
+				shot.TargetCenterY = target.y;
 				shot.radius = Math.sqrt(
 							Math.pow((shot.x-target.x), 2) + 
 							Math.pow((shot.y-target.y), 2) 
@@ -119,14 +126,15 @@
 			var context = canvas.getContext("2d")
 			
 			for (var i = shots.length - 1; i >= 0; i--) {
-				
+				var x = (shots[i].x/shots[i].TargetCenterX) * target.x;
+				var y = (shots[i].y/shots[i].TargetCenterY) * target.y;
 
 				context.beginPath();
 				context.lineWidth = 3;
-      			context.moveTo(shots[i].x-4,shots[i].y);
-				context.lineTo(shots[i].x+4,shots[i].y);
-				context.moveTo(shots[i].x,shots[i].y-4);
-				context.lineTo(shots[i].x,shots[i].y+4);
+      			context.moveTo(x-4,y);
+				context.lineTo(x+4,y);
+				context.moveTo(x,y-4);
+				context.lineTo(x,y+4);
 				context.strokeStyle = "grey";//"rgb(255,255,255)";
 				context.stroke();  
 				context.closePath()
