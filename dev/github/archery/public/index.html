@@ -8,98 +8,147 @@
 <body>
 	<h1>Hello</h1>
 	<canvas id="canvas" width="1000" height="1000" style="border:1px solid #000000;"></canvas>
-	
+	<div id="shots"></div>
+
 	<script>
-
-		var canvas = document.getElementById("canvas")
-		var ctx = canvas.getContext("2d")
-
-		var w = canvas.width
-		var h = canvas.height
-		//h=w;
-
-		var Radius = 300;
 		var shots = [];
 
-		var target = {
-		  x: w / 2,
-		  y: h / 2,
-		  r: w / 2,
-		}
-
-	
-		var scores =  [
-			{score: 10, colour:"gold"},
-		 	{score: 9, colour:"gold"},
-			{score: 8, colour:"red"},
-			{score: 7, colour:"red"},
-			{score: 6, colour:"blue"},
-			{score: 5, colour:"blue"},
-			{score: 4, colour:"black"},
-			{score: 3, colour:"black"},
-			{score: 2, colour:"white"},
-			{score: 1, colour:"white"},
-			//{score: 0, colour:"black"}
-			];
-
-
-		for (var i = scores.length - 1; i >= 0; i--) {
-			scores[i].radius = (target.r/scores.length)*(i+1);
-
-			ctx.beginPath()
-			ctx.fillStyle = scores[i].colour
-			ctx.arc(target.x, target.y, scores[i].radius, 0, Math.PI*2, false)
-			ctx.fill()
-			ctx.lineWidth = 1;
-      		ctx.strokeStyle = '#003300';
-			ctx.stroke();
-			ctx.closePath()
-		
+		document.getElementsByTagName("BODY")[0].onresize = function(){
+			console.log("OuterWidth: " + window.outerWidth);
+			console.log("outerHeight: " + window.outerHeight);
+			console.log("innerHeight: " + window.innerHeight);
+			drawTarget();
+			ShowShowsOnTarget(shots)
 		};
-
 		
-		// ctx.beginPath()
-		// ctx.fillStyle = "blue"
-		// ctx.arc(500, 200, 20, 0, Math.PI*2, false)
-		// ctx.fill()
-		// ctx.closePath()
-	
-		window.onmousedown = function(e) {
-		    x1 = e.pageX - canvas.getBoundingClientRect().left
-		    y1 = e.pageY - canvas.getBoundingClientRect().top
-		
-			shots[0] ={};
-		    shots[0].x = x1-window.scrollX;
-		    shots[0].y = y1-window.scrollY;
-		    shots[0].score = 0;
-		   
-		   	console.log("hello x,y (" + x1 + "," +y1 +")   Origin: (" + target.x + "," +target.y + ") R:" + target.r );
-			
-			console.log("Radius r:" + 
-				Math.sqrt( 
-					Math.pow((shots[0].x-target.x), 2) + 
-					Math.pow((shots[0].y-target.y), 2) 
-				)
-			);	
-			
-			console.log("Scoll height: (" + window.scrollX + "," + window.scrollY + ")");
+		drawTarget();
 
-			var shotRadius= Math.sqrt(
-		    	(shots[0].x-target.x)*(shots[0].x-target.x) + 
-		    	(shots[0].y-target.y)*(shots[0].y-target.y));
-	
-			for (var i = scores.length - 1; i >= 0; i--) {
-	
-			    if (shotRadius < scores[i].radius && shots[0].score < scores[i].score) {
-			    		shots[0].score =scores[i].score;
-			    }
+		function drawTarget(){
+
+			var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0) -30;
+			var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
+			var canvas = document.getElementById("canvas")
+			canvas.width = viewportWidth;
+			var ctx = canvas.getContext("2d")
+
+
+			var w = viewportWidth;// canvas.width
+			var h = canvas.height
+			//h=w;
+
+			var Radius = 300;
+
+			var target = {
+			  x: w / 2,
+			  y: h / 2,
+			  r: w / 2,
 			}
 
-			alert("Shot: " + shots[0].score)
+		
+			var scores =  [
+				{score: 10, colour:"gold"},
+			 	{score: 9, colour:"gold"},
+				{score: 8, colour:"red"},
+				{score: 7, colour:"red"},
+				{score: 6, colour:"blue"},
+				{score: 5, colour:"blue"},
+				{score: 4, colour:"black"},
+				{score: 3, colour:"black"},
+				{score: 2, colour:"white"},
+				{score: 1, colour:"white"},
+				//{score: 0, colour:"black"}
+				];
 
+
+			for (var i = scores.length - 1; i >= 0; i--) {
+				scores[i].radius = (target.r/scores.length)*(i+1);
+
+				ctx.beginPath()
+				ctx.fillStyle = scores[i].colour
+				ctx.arc(target.x, target.y, scores[i].radius, 0, Math.PI*2, false)
+				ctx.fill()
+				ctx.lineWidth = 1;
+	      		ctx.strokeStyle = '#003300';
+				ctx.stroke();
+				ctx.closePath()
+			
+			};
+
+			
+			// ctx.beginPath()
+			// ctx.fillStyle = "blue"
+			// ctx.arc(500, 200, 20, 0, Math.PI*2, false)
+			// ctx.fill()
+			// ctx.closePath()
+		
+			window.onmousedown = function(e) {
+			    x1 = e.pageX - canvas.getBoundingClientRect().left
+			    y1 = e.pageY - canvas.getBoundingClientRect().top
+				
+				var shot = {
+					x : x1-window.scrollX,
+				    y : y1-window.scrollY,
+				    score : 0,
+				};
+
+				shot.radius = Math.sqrt(
+							Math.pow((shot.x-target.x), 2) + 
+							Math.pow((shot.y-target.y), 2) 
+						)
+			
+				
+				for (var i = scores.length - 1; i >= 0; i--) {
+		
+				    if (shot.radius < scores[i].radius && shot.score < scores[i].score) {
+				    		shot.score =scores[i].score;
+				    }
+				}
+
+				//alert("Shot: " + shot.score)
+
+				//shots[0] =shot;
+			    shots.push(shot);
+			    RefreshShotsList(shots);
+			    ShowShowsOnTarget(shots);
+			}
+		};
+
+		function ShowShowsOnTarget(shots){
+			var canvas = document.getElementById("canvas")
+			var context = canvas.getContext("2d")
+			
+			for (var i = shots.length - 1; i >= 0; i--) {
+				
+
+				context.beginPath();
+				context.lineWidth = 3;
+      			context.moveTo(shots[i].x-4,shots[i].y);
+				context.lineTo(shots[i].x+4,shots[i].y);
+				context.moveTo(shots[i].x,shots[i].y-4);
+				context.lineTo(shots[i].x,shots[i].y+4);
+				context.strokeStyle = "grey";//"rgb(255,255,255)";
+				context.stroke();  
+				context.closePath()
+		
+			};
+
+		
 		}
 
+		function  RefreshShotsList(shots){
+			var html = "<ul>";
+			for (var i = shots.length - 1; i >= 0; i--) {
+				html = html + "<li>" + shots[i].score + "</li>"
+				shots[i]
 
+			};
+
+			 html = html+ "</ul>";
+			var shotsDiv = document.getElementById("shots");
+			shotsDiv.innerHTML = html;
+
+		}
 	</script>
 </body>
 </html>
