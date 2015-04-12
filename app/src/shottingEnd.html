@@ -1,0 +1,19 @@
+<template>
+  <section>
+    <h2>${heading}</h2>
+
+    <table>
+      <tr>
+        <td  class="thumbnail">Score:</td>
+        <td repeat.for="shot of shots">
+          <a class="thumbnail"> ${shot.score}</a>
+        </td>
+      <tr>
+    </table>
+
+    <button click.trigger="resizeCanvas()">Draw Taget</button>
+
+    <canvas class='target' id="canvas" onresize.delegate="resizeCanvas($event)" click.delegate="addShot($event)"></canvas>
+
+  </section>
+</template>
