@@ -5,9 +5,12 @@ export class ShottingEnd{
   endNumber =1;
   distance = 30;
   shots = [];
+  roundCount = 2;
+  roundTotal = 123;
 
   rounds = [];
   ends = [];
+  shotsTotal = 0;
   endNumber = 0;
 
   archers = [{
@@ -31,6 +34,31 @@ export class ShottingEnd{
     //{score: 0, colour:"black"}
     ];
 
+    setRoundTotal(){
+
+      var myTotal = 0;  //Variable to hold your total
+
+      for(var i=0, len= this.ends.length; i<len; i++){
+          // iterate over the ends (set of arrows), get the total of each end.
+          myTotal += this.setShotsTotal(this.ends[i].shots);
+      }
+
+      this.roundTotal = myTotal;
+      return myTotal;
+
+    };
+
+
+  setShotsTotal(myShots){
+    var myTotal = 0;  //Variable to hold your total
+
+    for(var i=0, len= myShots.length; i<len; i++){
+        myTotal += myShots[i].score;  //Iterate over your first array and then grab the second element add the values up
+    }
+    //this.shotsTotal = myTotal;
+    return myTotal;
+
+  };
 
   get fullName(){
     return '${this.firstName} ${this.lastName}';
@@ -111,16 +139,7 @@ export class ShottingEnd{
    var h = canvas.height
    var Radius = w/2;
 
-
- 		// 	var shot = {
- 		// 		x :  x1-window.scrollX,
- 		// 	  y : y1-window.scrollY,
- 		// 	  score : 0,
- 		// 	};
-       //
-
-
-			var shot = {
+   var shot = {
 				x : e.offsetX,
 			  y : e.offsetY,
 			  score : 0
@@ -156,7 +175,10 @@ export class ShottingEnd{
  			}
 
  		    this.archers[0].rounds[0].ends[this.endNumber].shots.push(shot);
- 		    //RefreshShotsList(this.archers);
+
+         this.shotsTotal = this.setShotsTotal(this.archers[0].rounds[0].ends[this.endNumber].shots);
+         this.roundTotal = this.setRoundTotal();
+         //RefreshShotsList(this.archers);
  		    this.drawTarget(canvas);
  		    this.ShowShotsOnTarget(canvas, this.archers[0].rounds[0].ends[this.endNumber].shots);
  		};

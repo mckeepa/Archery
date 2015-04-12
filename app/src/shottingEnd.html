@@ -1,19 +1,21 @@
 <template>
   <section>
-    <h2>${heading}</h2>
+    <!-- <h2>${heading} (${roundCount}): ${roundTotal}</h2> -->
+     <h2>End #${ends.length}: Total:${roundTotal}</h2> 
 
     <table>
       <tr>
-        <td  class="thumbnail">Score:</td>
+        <td  class="thumbnail">Score:${shotsTotal}</td>
         <td repeat.for="shot of shots">
           <a class="thumbnail"> ${shot.score}</a>
         </td>
       <tr>
     </table>
 
-    <button click.trigger="resizeCanvas()">Draw Taget</button>
+    <button click.trigger="resizeCanvas()">Redraw Taget</button>
+    <button click.trigger="nextEnd()">Next</button>
 
-    <canvas class='target' id="canvas" onresize.delegate="resizeCanvas($event)" click.delegate="addShot($event)"></canvas>
+    <canvas class='target' id="canvas" resize.delegate="resizeCanvas($event)" click.delegate="addShot($event)"></canvas>
 
   </section>
 </template>
