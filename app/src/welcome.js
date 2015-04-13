@@ -1,7 +1,7 @@
 export class Welcome{
-  heading = 'Welcome to the Aurelia Navigation App!';
-  firstName = 'John';
-  lastName = 'Doe';
+  heading = 'Welcome to the Archery Shot App!';
+  firstName = 'Paul';
+  lastName = 'McKee';
 
   get fullName(){
     return `${this.firstName} ${this.lastName}`;

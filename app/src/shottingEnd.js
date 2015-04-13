@@ -40,7 +40,7 @@ export class ShottingEnd{
 
       for(var i=0, len= this.ends.length; i<len; i++){
           // iterate over the ends (set of arrows), get the total of each end.
-          myTotal += this.setShotsTotal(this.ends[i].shots);
+          myTotal += this.setShotsTotal(this.ends[i]);
       }
 
       this.roundTotal = myTotal;
@@ -49,14 +49,15 @@ export class ShottingEnd{
     };
 
 
-  setShotsTotal(myShots){
-    var myTotal = 0;  //Variable to hold your total
+  setShotsTotal(end){
+    end.total = 0;  //Variable to hold your total
 
-    for(var i=0, len= myShots.length; i<len; i++){
-        myTotal += myShots[i].score;  //Iterate over your first array and then grab the second element add the values up
+    for(var i=0, len= end.shots.length; i<len; i++){
+      end.total += end.shots[i].score;  //Iterate over your first array and then grab the second element add the values up
     }
-    //this.shotsTotal = myTotal;
-    return myTotal;
+
+    this.shotsTotal =end.total;
+    return end.total;
 
   };
 
@@ -72,10 +73,12 @@ export class ShottingEnd{
       rounds: this.rounds,
     }];
 
-    this.ends.push({
-      shots: this.shots,
-      total: 0
-    });
+    this.nextEnd();
+
+    // this.ends.push({
+    //   shots: this.shots,
+    //   total: 0
+    // });
 
     this.rounds.push({
       name:'Club shoot 22-Feb-2014',
@@ -89,6 +92,7 @@ export class ShottingEnd{
       total:0
     });
 
+    //this.shots = this.end
 
     this.target = {
   			  x: 200,
@@ -100,9 +104,34 @@ export class ShottingEnd{
 
 
   Complete(){
-    alert(`All ${this.numberOfArrows} arrow shot.`);
+    alert('All ${this.numberOfArrows} arrow shot.');
   }
 
+  nextEnd(){
+
+    // this.ends.push({
+    //   shots: this.shots,
+    //   total: 0
+    // });
+    //
+    //
+    this.shots = [];
+
+    this.ends.push({
+      shots: this.shots,
+      total: 0
+    });
+    this.endNumber = this.ends.length-1;
+
+    //this.rounds.ends = this.ends;
+    //this.ends.shots = [];
+
+    // for (var i = this.shots.length - 1; i >= 0; i--) {
+    //   this.shots.pop();
+    // }
+  //  this.shots = this.ends.shots;
+
+  };
 
   drawTarget(canvas){
 
@@ -157,10 +186,6 @@ export class ShottingEnd{
 
  			shot.TargetCenterX = canvas.offsetWidth /2; //this.target.x; //e.x;
  			shot.TargetCenterY = canvas.offsetHeight /2; //this.target.y; //e.y;
- 		// 	shot.radius = Math.sqrt(
- 		// 				Math.pow((shot.x-e.x), 2) +
- 		// 				Math.pow((shot.y-e.y), 2)
- 		// 			);
 
        shot.radius = Math.sqrt(
  						Math.pow((shot.x-shot.TargetCenterX), 2) +
@@ -176,7 +201,7 @@ export class ShottingEnd{
 
  		    this.archers[0].rounds[0].ends[this.endNumber].shots.push(shot);
 
-         this.shotsTotal = this.setShotsTotal(this.archers[0].rounds[0].ends[this.endNumber].shots);
+         this.shotsTotal = this.setShotsTotal(this.archers[0].rounds[0].ends[this.endNumber]); //.shots);
          this.roundTotal = this.setRoundTotal();
          //RefreshShotsList(this.archers);
  		    this.drawTarget(canvas);
@@ -195,10 +220,10 @@ export class ShottingEnd{
   		//RefreshShotsList(archers);
   		//ShowShotsOnTarget(archers[0].rounds[0].ends[endNumber].shots);
 
-  };
+    };
 
 
-  ShowShotsOnTarget(canvas, shots){
+    ShowShotsOnTarget(canvas, shots){
       var context = canvas.getContext("2d")
 
       for (var i = shots.length - 1; i >= 0; i--) {

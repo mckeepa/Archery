@@ -1,7 +1,7 @@
 <template>
   <section>
     <!-- <h2>${heading} (${roundCount}): ${roundTotal}</h2> -->
-     <h2>End #${ends.length}: Total:${roundTotal}</h2> 
+     <h2>End #${ends.length}: Total:${roundTotal}</h2>
 
     <table>
       <tr>
@@ -12,8 +12,8 @@
       <tr>
     </table>
 
-    <button click.trigger="resizeCanvas()">Redraw Taget</button>
-    <button click.trigger="nextEnd()">Next</button>
+    <button click.trigger="resizeCanvas()" class="btn btn-info">Redraw Taget</button>
+    <button click.trigger="nextEnd()" class="btn btn-success">Next</button>
 
     <canvas class='target' id="canvas" resize.delegate="resizeCanvas($event)" click.delegate="addShot($event)"></canvas>
 
